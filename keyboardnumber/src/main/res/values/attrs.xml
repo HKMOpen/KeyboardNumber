@@ -3,6 +3,8 @@
     <declare-styleable name="KeyboardNumberPicker">
         <attr name="knpDisplayTextColor" format="color"/>
         <attr name="knpDisplayBackgroundColor" format="color"/>
+        <attr name="knpSubDisplayTextColor" format="color"/>
+        <attr name="knpSubDisplayBackgroundColor" format="color"/>
         <attr name="knpKeysTextColor" format="color"/>
         <attr name="knpKeysBackgroundColor" format="color"/>
         <attr name="knpBackgroundColor" format="color"/>

@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion project.ANDROID_BUILD_SDK_VERSION as int
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 25
+        minSdkVersion "${ANDROID_BUILD_MIN_SDK_VERSION}"
+        targetSdkVersion "${ANDROID_BUILD_TARGET_SDK_VERSION}"
         versionCode 1
         versionName "1.0"
 
@@ -26,8 +26,10 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile libden.appCompat
+    compile libden.percent
+    compile libden.gridlayout
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:percent:25.2.0'
-    compile 'com.android.support:gridlayout-v7:25.2.0'
 }
+
+apply from: 'bintrayrelease.gradle'

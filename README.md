@@ -21,7 +21,7 @@ Adicione o repositório JitPack no seu build.gradle no final de repositories:
 e adicione a dependência
 ```
   dependencies {
-	        compile 'com.github.policante:KeyboardNumber:master-SNAPSHOT'
+	  compile 'com.hkm.ui:cashierpad:master-SNAPSHOT'
 	}
 ```
 

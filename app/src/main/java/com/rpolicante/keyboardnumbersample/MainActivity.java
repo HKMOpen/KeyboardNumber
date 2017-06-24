@@ -12,6 +12,9 @@ import com.rpolicante.keyboardnumber.KeyboardNumberKeyListener;
 import com.rpolicante.keyboardnumber.KeyboardNumberPicker;
 import com.rpolicante.keyboardnumber.KeyboardNumberPickerHandler;
 
+import static com.rpolicante.keyboardnumber.KeyboardNumberPicker.CASH_PAD;
+import static com.rpolicante.keyboardnumber.KeyboardNumberPicker.SIMPLE_PAD;
+
 public class MainActivity extends AppCompatActivity implements KeyboardNumberKeyListener, KeyboardNumberPickerHandler, KeyboardNumberFormatter {
 
     private KeyboardNumberPicker picker;
@@ -22,7 +25,10 @@ public class MainActivity extends AppCompatActivity implements KeyboardNumberKey
         setContentView(R.layout.activity_main);
 
         picker = new KeyboardNumberPicker
-                .Builder(1001)
+                .Builder(CASH_PAD)
+                .setCurrency("HKD")
+                .setValueToBeCollected(500)
+                .overrideMainButton("CONSOILATE˚")
                 .create();
 
         Button openPicker = (Button) findViewById(R.id.open_picker);
@@ -64,11 +70,10 @@ public class MainActivity extends AppCompatActivity implements KeyboardNumberKey
     @Override
     public String formatNumber(KeyboardNumberPicker picker, String strValue) {
         String value = strValue.replaceAll("\\D+", "");
-        StringBuilder out = new StringBuilder();
-        int j = 0;
-        String mask = "(##) #####-####";
-        String lastChar = "";
-        for (int i = 0; i < mask.length(); i++) {
+         /*
+   StringBuilder out = new StringBuilder();
+   int j = 0; String mask = "(##) #####-####"; String lastChar = "";
+   for (int i = 0; i < mask.length(); i++) {
             if (mask.charAt(i) == '#') {
                 try {
                     char zzz = value.charAt(j);
@@ -85,7 +90,11 @@ public class MainActivity extends AppCompatActivity implements KeyboardNumberKey
                 lastChar += mask.charAt(i);
             }
         }
-        return out.toString();
+
+        */
+        //return out.toString();
+
+        return value;
     }
 
 }
