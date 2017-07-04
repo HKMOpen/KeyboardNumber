@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
@@ -11,8 +13,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
@@ -20,9 +20,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rpolicante.keyboardnumber.Util.KeyboardNumberFormatter;
-import com.rpolicante.keyboardnumber.Util.KeyboardNumberKeyListener;
+import com.rpolicante.keyboardnumber.Util.NfKeyListener;
+import com.rpolicante.keyboardnumber.Util.NfPicker;
 import com.rpolicante.keyboardnumber.Util.KeyboardNumberPickerHandler;
+import com.rpolicante.keyboardnumber.Util.NfPickerHandler;
 
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -36,10 +37,10 @@ import static com.rpolicante.keyboardnumber.Util.Kp.CASH_PAD;
 import static com.rpolicante.keyboardnumber.Util.Kp.SIMPLE_PAD;
 
 /**
- * Created by Cooper Card on 09/03/2017.
+ * Created by hesk on 5/7/2017.
  */
 
-public class KeyboardNumberPicker extends DialogFragment {
+public class KeypadPickerNF  extends DialogFragment {
 
     private TextView display, display_expect;
     private View keyboardNumberView;
@@ -50,8 +51,8 @@ public class KeyboardNumberPicker extends DialogFragment {
     private int theme = R.style.KeyboardNumberTheme;
     private int tag, expectation, difference;
 
-    public static KeyboardNumberPicker newInstance(Bundle dc) {
-        KeyboardNumberPicker fragment = new KeyboardNumberPicker();
+    public static KeypadPickerNF newInstance(Bundle dc) {
+        KeypadPickerNF fragment = new KeypadPickerNF();
         fragment.setArguments(dc);
         return fragment;
     }
@@ -124,14 +125,14 @@ public class KeyboardNumberPicker extends DialogFragment {
     private void createDialog() {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         keyboardNumberView = inflater.inflate(getLayout(), null);
-        keyboardDialog = new AlertDialog.Builder(getContext(), theme)
+        keyboardDialog = new AlertDialog.Builder(getActivity(), theme)
                 .setView(keyboardNumberView)
                 .setPositiveButton(!save_label.isEmpty() ? save_label : getString(R.string.knp_confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        KeyboardNumberPickerHandler handler = getImplementsHandlerListener();
+                        NfPickerHandler handler = getImplementsHandlerListener();
                         if (handler != null) {
-                            handler.onConfirmAction(KeyboardNumberPicker.this, strValue);
+                            handler.onConfirmAction(KeypadPickerNF.this, strValue);
                         }
                         dismiss();
                     }
@@ -139,9 +140,9 @@ public class KeyboardNumberPicker extends DialogFragment {
                 .setNegativeButton(R.string.knp_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        KeyboardNumberPickerHandler handler = getImplementsHandlerListener();
+                        NfPickerHandler handler = getImplementsHandlerListener();
                         if (handler != null) {
-                            handler.onCancelAction(KeyboardNumberPicker.this);
+                            handler.onCancelAction(KeypadPickerNF.this);
                         }
                         dismiss();
                     }
@@ -168,13 +169,13 @@ public class KeyboardNumberPicker extends DialogFragment {
 
     private void setup(Bundle args) {
         @SuppressLint("Recycle")
-        TypedArray attributes = getContext().obtainStyledAttributes(theme, R.styleable.KeyboardNumberPicker);
+        TypedArray attributes = getActivity().obtainStyledAttributes(theme, R.styleable.KeyboardNumberPicker);
 
-        int knpDisplayTextColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpDisplayTextColor, ContextCompat.getColor(getContext(), android.R.color.secondary_text_light));
-        int knpDisplayBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpDisplayBackgroundColor, ContextCompat.getColor(getContext(), android.R.color.transparent));
+        int knpDisplayTextColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpDisplayTextColor, ContextCompat.getColor(getActivity(), android.R.color.secondary_text_light));
+        int knpDisplayBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpDisplayBackgroundColor, ContextCompat.getColor(getActivity(), android.R.color.transparent));
 
-        int knpsDisplayTextColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpSubDisplayTextColor, ContextCompat.getColor(getContext(), android.R.color.secondary_text_light));
-        int knpsDisplayBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpSubDisplayBackgroundColor, ContextCompat.getColor(getContext(), android.R.color.transparent));
+        int knpsDisplayTextColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpSubDisplayTextColor, ContextCompat.getColor(getActivity(), android.R.color.secondary_text_light));
+        int knpsDisplayBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpSubDisplayBackgroundColor, ContextCompat.getColor(getActivity(), android.R.color.transparent));
 
         if (tag == CASH_PAD) {
             display_expect = (TextView) keyboardNumberView.findViewById(R.id.collected_cash);
@@ -192,8 +193,8 @@ public class KeyboardNumberPicker extends DialogFragment {
         }
         display.setText(strValue);
 
-        int knpBackspaceTintColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpBackspaceTintColor, ContextCompat.getColor(getContext(), android.R.color.secondary_text_light));
-        int knpBackspaceBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpBackspaceBackgroundColor, ContextCompat.getColor(getContext(), android.R.color.transparent));
+        int knpBackspaceTintColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpBackspaceTintColor, ContextCompat.getColor(getActivity(), android.R.color.secondary_text_light));
+        int knpBackspaceBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpBackspaceBackgroundColor, ContextCompat.getColor(getActivity(), android.R.color.transparent));
         backspace = (ImageView) keyboardNumberView.findViewById(R.id.rpolicante_dialog_picker_backspace);
         backspace.setColorFilter(knpBackspaceTintColor, PorterDuff.Mode.SRC_IN);
         backspace.getRootView().setBackgroundColor(knpBackspaceBackgroundColor);
@@ -211,7 +212,7 @@ public class KeyboardNumberPicker extends DialogFragment {
             }
         });
 
-        int knpBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpBackgroundColor, ContextCompat.getColor(getContext(), android.R.color.background_light));
+        int knpBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpBackgroundColor, ContextCompat.getColor(getActivity(), android.R.color.background_light));
         keyboardDialog.getWindow().setBackgroundDrawable(new ColorDrawable(knpBackgroundColor));
 
         View.OnClickListener keyListener = new View.OnClickListener() {
@@ -225,8 +226,8 @@ public class KeyboardNumberPicker extends DialogFragment {
             }
         };
 
-        int knpKeysTextColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpKeysTextColor, ContextCompat.getColor(getContext(), android.R.color.secondary_text_light));
-        int knpKeysBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpKeysBackgroundColor, ContextCompat.getColor(getContext(), android.R.color.transparent));
+        int knpKeysTextColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpKeysTextColor, ContextCompat.getColor(getActivity(), android.R.color.secondary_text_light));
+        int knpKeysBackgroundColor = attributes.getColor(R.styleable.KeyboardNumberPicker_knpKeysBackgroundColor, ContextCompat.getColor(getActivity(), android.R.color.transparent));
 
         GridLayout grid = (GridLayout) keyboardNumberView.findViewById(R.id.rpolicante_dialog_picker_grid);
         int childCount = grid.getChildCount();
@@ -275,19 +276,19 @@ public class KeyboardNumberPicker extends DialogFragment {
                 }
 
             } else {
-                KeyboardNumberKeyListener keyListener = getImplementsKeyListener();
+                NfKeyListener keyListener = getImplementsKeyListener();
                 if (keyListener != null) {
-                    keyListener.beforeKeyPressed(this, oldValue, value);
-                    keyListener.onTextChanged(this, oldValue, strValue, value);
+                    keyListener.beforeKeyPressed(KeypadPickerNF.this, oldValue, value);
+                    keyListener.onTextChanged(KeypadPickerNF.this, oldValue, strValue, value);
                 }
 
-                KeyboardNumberFormatter formatter = getImplementsFormatterListener();
+                NfPicker formatter = getImplementsFormatterListener();
                 if (formatter != null) {
                     strValue = formatter.formatNumber(this, strValue);
                 }
 
                 if (keyListener != null) {
-                    keyListener.afterKeyPressed(this, strValue);
+                    keyListener.afterKeyPressed(KeypadPickerNF.this, strValue);
                 }
             }
             display.setText(strValue);
@@ -309,39 +310,41 @@ public class KeyboardNumberPicker extends DialogFragment {
         updateText(null);
     }
 
-    private KeyboardNumberFormatter getImplementsFormatterListener() {
+    private NfPicker getImplementsFormatterListener() { 
+        
         final Activity activity = getActivity();
         final Fragment fragment = getParentFragment();
-        if (activity instanceof KeyboardNumberFormatter) {
-            return (KeyboardNumberFormatter) activity;
-        } else if (fragment instanceof KeyboardNumberFormatter) {
-            return (KeyboardNumberFormatter) fragment;
+        if (activity instanceof NfPicker) {
+            return (NfPicker) activity;
+        } else if (fragment instanceof NfPicker) {
+            return (NfPicker) fragment;
         } else {
             return null;
         }
     }
 
-    private KeyboardNumberPickerHandler getImplementsHandlerListener() {
+    private NfPickerHandler getImplementsHandlerListener() {
         final Activity activity = getActivity();
         final Fragment fragment = getParentFragment();
         if (activity instanceof KeyboardNumberPickerHandler) {
-            return (KeyboardNumberPickerHandler) activity;
+            return (NfPickerHandler) activity;
         } else if (fragment instanceof KeyboardNumberPickerHandler) {
-            return (KeyboardNumberPickerHandler) fragment;
+            return (NfPickerHandler) fragment;
         } else {
             return null;
         }
     }
 
-    private KeyboardNumberKeyListener getImplementsKeyListener() {
+    private NfKeyListener getImplementsKeyListener() {
         final Activity activity = getActivity();
         final Fragment fragment = getParentFragment();
-        if (activity instanceof KeyboardNumberKeyListener) {
-            return (KeyboardNumberKeyListener) activity;
-        } else if (fragment instanceof KeyboardNumberKeyListener) {
-            return (KeyboardNumberKeyListener) fragment;
+        if (activity instanceof NfKeyListener) {
+            return (NfKeyListener) activity;
+        } else if (fragment instanceof NfKeyListener) {
+            return (NfKeyListener) fragment;
         } else {
             return null;
         }
     }
+
 }

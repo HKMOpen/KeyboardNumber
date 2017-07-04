@@ -7,13 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.rpolicante.keyboardnumber.KeyboardNumberFormatter;
-import com.rpolicante.keyboardnumber.KeyboardNumberKeyListener;
+import com.rpolicante.keyboardnumber.Util.KeyboardNumberFormatter;
+import com.rpolicante.keyboardnumber.Util.KeyboardNumberKeyListener;
 import com.rpolicante.keyboardnumber.KeyboardNumberPicker;
-import com.rpolicante.keyboardnumber.KeyboardNumberPickerHandler;
+import com.rpolicante.keyboardnumber.Util.KeyboardNumberPickerHandler;
+import com.rpolicante.keyboardnumber.Util.Kp;
 
-import static com.rpolicante.keyboardnumber.KeyboardNumberPicker.CASH_PAD;
-import static com.rpolicante.keyboardnumber.KeyboardNumberPicker.SIMPLE_PAD;
+import static com.rpolicante.keyboardnumber.Util.Kp.CASH_PAD;
+
 
 public class MainActivity extends AppCompatActivity implements KeyboardNumberKeyListener, KeyboardNumberPickerHandler, KeyboardNumberFormatter {
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardNumberKey
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        picker = new KeyboardNumberPicker
+        picker = new Kp
                 .Builder(CASH_PAD)
                 .setCurrency("HKD")
                 .setValueToBeCollected(500)
