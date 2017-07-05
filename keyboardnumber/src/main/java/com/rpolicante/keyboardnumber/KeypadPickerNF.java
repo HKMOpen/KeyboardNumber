@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.rpolicante.keyboardnumber.Util.NfKeyListener;
 import com.rpolicante.keyboardnumber.Util.NfPicker;
-import com.rpolicante.keyboardnumber.Util.KeyboardNumberPickerHandler;
 import com.rpolicante.keyboardnumber.Util.NfPickerHandler;
 
 import java.text.NumberFormat;
@@ -326,9 +325,9 @@ public class KeypadPickerNF  extends DialogFragment {
     private NfPickerHandler getImplementsHandlerListener() {
         final Activity activity = getActivity();
         final Fragment fragment = getParentFragment();
-        if (activity instanceof KeyboardNumberPickerHandler) {
+        if (activity instanceof NfPickerHandler) {
             return (NfPickerHandler) activity;
-        } else if (fragment instanceof KeyboardNumberPickerHandler) {
+        } else if (fragment instanceof NfPickerHandler) {
             return (NfPickerHandler) fragment;
         } else {
             return null;
