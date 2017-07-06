@@ -18,11 +18,13 @@ public class Kp {
     public static final String ARG_EXPECT = Kp.class.getPackage() + ".ARG_EXPECT";
     public static final String ARG_SAVE_LABEL = Kp.class.getPackage() + ".ARG_SAVE_LABEL";
     public static final String ARG_VALUE = Kp.class.getPackage() + ".ARG_VALUE";
+    public static final String ARG_RETAIN = Kp.class.getPackage() + ".ARG_RETAIN";
 
     public static class Builder {
 
         private int tag, collection_expectation;
         private String over_main_button_label, currency;
+        private boolean retainInstance = true;
 
         public Builder(int tag) {
             this.tag = tag;
@@ -43,7 +45,12 @@ public class Kp {
             return this;
         }
 
-        public Bundle toBundle(){
+        public Builder doNotRetainInstance() {
+            retainInstance = false;
+            return this;
+        }
+
+        public Bundle toBundle() {
             Bundle args = new Bundle();
             args.putInt(ARG_TAG, tag);
             if (over_main_button_label != null) {
@@ -55,6 +62,7 @@ public class Kp {
             if (collection_expectation > 0) {
                 args.putInt(ARG_EXPECT, collection_expectation);
             }
+            args.putBoolean(ARG_RETAIN, retainInstance);
             return args;
         }
 

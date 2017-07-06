@@ -29,6 +29,17 @@
             android:gravity="center"
             android:text="KeyboardNumberPicker" />
 
+
+        <Button
+            android:id="@+id/open_picker2"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:text="FF Picker" />
+
     </LinearLayout>
 
     <TextView

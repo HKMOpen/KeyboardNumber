@@ -32,12 +32,20 @@ public class MainActivity extends AppCompatActivity implements KeyboardNumberKey
                 .overrideMainButton("CONSOILATE˚")
                 .create();
 
-        Button openPicker = (Button) findViewById(R.id.open_picker);
-        openPicker.setOnClickListener(new View.OnClickListener() {
+        Button open_gl = (Button) findViewById(R.id.open_picker);
+        Button open_picker_2 = (Button) findViewById(R.id.open_picker2);
+        open_gl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 picker.clearKeyboard();
                 picker.show(getSupportFragmentManager(), "KeyboardNumberPicker");
+            }
+        });
+        open_picker_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFra df = new DialogFra();
+                df.show(getFragmentManager(), "KC");
             }
         });
     }

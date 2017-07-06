@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
@@ -24,11 +26,13 @@ import com.rpolicante.keyboardnumber.Util.NfKeyListener;
 import com.rpolicante.keyboardnumber.Util.NfPicker;
 import com.rpolicante.keyboardnumber.Util.NfPickerHandler;
 
+import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.Currency;
 
 import static com.rpolicante.keyboardnumber.Util.Kp.ARG_CURRENCY;
 import static com.rpolicante.keyboardnumber.Util.Kp.ARG_EXPECT;
+import static com.rpolicante.keyboardnumber.Util.Kp.ARG_RETAIN;
 import static com.rpolicante.keyboardnumber.Util.Kp.ARG_SAVE_LABEL;
 import static com.rpolicante.keyboardnumber.Util.Kp.ARG_TAG;
 import static com.rpolicante.keyboardnumber.Util.Kp.ARG_VALUE;
@@ -39,7 +43,7 @@ import static com.rpolicante.keyboardnumber.Util.Kp.SIMPLE_PAD;
  * Created by hesk on 5/7/2017.
  */
 
-public class KeypadPickerNF  extends DialogFragment {
+public class KeypadPickerNF extends DialogFragment {
 
     private TextView display, display_expect;
     private View keyboardNumberView;
@@ -59,15 +63,13 @@ public class KeypadPickerNF  extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setCancelable(false);
-        setRetainInstance(true);
+        setRetainInstance(getArguments().getBoolean(ARG_RETAIN));
         super.onCreate(savedInstanceState);
-
         if (null != savedInstanceState) {
             loadArguments(savedInstanceState);
         } else if (null != getArguments()) {
             loadArguments(getArguments());
         }
-
         setStyle(STYLE_NO_TITLE, theme);
     }
 
@@ -309,8 +311,7 @@ public class KeypadPickerNF  extends DialogFragment {
         updateText(null);
     }
 
-    private NfPicker getImplementsFormatterListener() { 
-        
+    private NfPicker getImplementsFormatterListener() {
         final Activity activity = getActivity();
         final Fragment fragment = getParentFragment();
         if (activity instanceof NfPicker) {
@@ -346,4 +347,25 @@ public class KeypadPickerNF  extends DialogFragment {
         }
     }
 
+    //FragmentManager mRetainedChildFragmentManager;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+      /*  if (getRetainInstance()) {
+            if (mRetainedChildFragmentManager != null) {
+                try {
+                    Field childFMField = Fragment.class.getDeclaredField("mChildFragmentManager");
+                    childFMField.setAccessible(true);
+                    childFMField.set(this, mRetainedChildFragmentManager);
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                mRetainedChildFragmentManager = getChildFragmentManager();
+            }
+        }*/
+    }
 }
